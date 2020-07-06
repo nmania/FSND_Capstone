@@ -141,7 +141,7 @@ def create_app(test_config=None):
         return greeting
 
     @app.route('/farts')
-    def get_greeting():
+    def get_test():
         return 'Who farted?'
 
     @app.route('/actors', methods=['GET'])
