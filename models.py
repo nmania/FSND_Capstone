@@ -8,8 +8,8 @@ import os
 database_path = os.environ.get('DATABASE_URL')
 
 # Check if the database exists, if not create it
-# if database_exists(database_path) == False:
-#     create_database(database_path)
+if database_exists(database_path) == False:
+    create_database(database_path)
 
 db = SQLAlchemy()
 
