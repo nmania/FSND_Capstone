@@ -140,6 +140,10 @@ def create_app(test_config=None):
         if excited == 'true': greeting = greeting + "!!!!!"
         return greeting
 
+    @app.route('/farts')
+    def get_greeting():
+        return 'Who farted?'
+
     @app.route('/actors', methods=['GET'])
     #@requires_auth('get:actors')
     def get_actors(payload):
