@@ -93,7 +93,7 @@ git push heroku master
 
 After it is running, you can run migrations using:
 ```
-heroku run python manage.py db upgrade --app name_of_your_application
+heroku run python manage.py db upgrade --app hiltz-fsnd-capstone
 ```
 
 To test out the app, go to your dashboard an run the app.
