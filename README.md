@@ -74,7 +74,7 @@ git remote -v
 
 Next add the postgres addon to your Heroku upp:
 ```
-heroku addons:create heroku-postgresql:hobby-dev --app name_of_your_application
+heroku addons:create heroku-postgresql:hobby-dev --app hiltz-fsnd-capstone
 ```
 heroku-postgresql is the name of the addon. hobby-dev on the other hand specifies the tier of the addon, in this case the free version which has a limit on the amount of data it will store, albeit fairly high.
 
