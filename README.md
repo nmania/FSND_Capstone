@@ -53,12 +53,12 @@ Then create a new app with (replacing app-name):
 heroku create app-name
 ```
 
-I named my app, hiltz-app-one
+I named my app, hiltz-fsnd-capstone
 The output will display a url for the app.
 In this case it was:
-<https://hiltz-app-one.herokuapp.com/>
+<https://hiltz-fsnd-capstone.herokuapp.com/ >
 and
-<https://git.heroku.com/hiltz-app-one.git>
+<https://git.heroku.com/hiltz-fsnd-capstone.git>
 
 Using the git url from above, add a remote using:
 ```
@@ -80,7 +80,7 @@ heroku-postgresql is the name of the addon. hobby-dev on the other hand specifie
 
 Double check that it installed with this:
 ```
-heroku config --app hiltz-app-one
+heroku config --app hiltz-fsnd-capstone
 ```
 That will also give you the database URL for the heroku instance.
 
@@ -104,13 +104,13 @@ We recommend working within a virtual environment whenever using Python for proj
 
 On Windows, run the following:
     py -m pip install --user virtualenv
-    py -m venv env
-The last variable above is the name of the virtual environment.  In this case 'env'
+    py -m venv venv
+The last variable above is the name of the virtual environment.  In this case 'venv'
 Then add the env folder to the gitignore
 Then activate the virtual environment by running:
-    .\env\Scripts\activate
+    .\venv\Scripts\activate
 If the above doesn't work, use:
-    source env/Scripts/activate
+    source venv/Scripts/activate
 Check to see if its running, run:
     where python
 It should display something allong the lines of (...env\Scripts\python.exe) if it's running.
