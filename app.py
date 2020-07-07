@@ -161,7 +161,7 @@ def create_app(test_config=None):
         try:
             actors = Actor.query.all()
             # Get the short drink for each drink
-            actors_json = [actors.format() for actor in actors]
+            actors_json = [actor.format() for actor in actors]
             return jsonify({
                 'success': True,
                 'actors': actors_json
@@ -177,14 +177,14 @@ def create_app(test_config=None):
             Actor.id == actor_id).one_or_none()
 
         if actor is None:
-            abort(404)  # abort if question id is not found
+            abort(404)  # abort if id is not found
         else:
             try:
                 actor.delete()
                 # return actor id that was deleted
                 return jsonify({
                     'success': True,
-                    'deleted': actor_id,
+                    'deleted': actor_id
                 })
             except Exception:
                 abort(422)
@@ -198,21 +198,31 @@ def create_app(test_config=None):
         new_name = body.get('name', None)
         new_age = body.get('age', None)
         new_gender = body.get('gender', None)
+        search = body.get('search', None)
 
-        try:  # If a search term was included, then return the search results
-            if not(new_name and new_age
-                    and new_gender):
-                abort(422)
-            else:
-                actor = Actor(name=new_name,
-                                    age=new_age,
-                                    gender=new_gender)
-                actor.insert()
-
+        try:
+            if search: # Return the search results
+                selection = Actor.query.order_by(Actor.id).filter(
+                    Actor.name.ilike('%{}%'.format(search))).all()
+                actors_json = [actor.format() for actor in selection]
                 return jsonify({
                     'success': True,
-                    'created': actor.id
+                    'actors': actors_json
                 })
+            else: #Post a new actor
+                if not(new_name and new_age
+                        and new_gender):
+                    abort(422)
+                else:
+                    actor = Actor(name=new_name,
+                                        age=new_age,
+                                        gender=new_gender)
+                    actor.insert()
+
+                    return jsonify({
+                        'success': True,
+                        'created': actor.id
+                    })
         except Exception:
             abort(422)
 
@@ -232,12 +242,9 @@ def create_app(test_config=None):
                 # Check what attributes are contained in the body and update accordingly
                 if 'name' in body:
                     actor.name = body.get('name')
-
-                # Check what attributes are contained in the body and update accordingly
                 if 'age' in body:
                     # body data is a string, so this must be coerced into an int
                     actor.age = int(body.get('age'))
-
                 if 'gender' in body:
                     actor.gender = body.get('gender')
 
@@ -259,14 +266,99 @@ def create_app(test_config=None):
     def get_movies(payload):
         try:
             movies = movie.query.all()
-            # Get the short drink for each drink
-            movies_json = [movies.format() for movie in movies]
+            # Get the descriptions of each movie
+            movies_json = [movie.format() for movie in movies]
             return jsonify({
                 'success': True,
                 'movies': movies_json
             })
         except Exception:
             abort(422)
+
+    @app.route('/movies/<int:movie_id>', methods=['DELETE'])
+    # @requires_auth('delete:movies')
+    def delete_movie(movie_id):
+
+        movie = Movie.query.filter(
+            Movie.id == movie_id).one_or_none()
+
+        if movie is None:
+            abort(404)  # abort if id is not found
+        else:
+            try:
+                movie.delete()
+                # return actor id that was deleted
+                return jsonify({
+                    'success': True,
+                    'deleted': movie_id
+                })
+            except Exception:
+                abort(422)
+
+
+    @app.route('/movies', methods=['POST'])
+    # @requires_auth('post:movies')
+    def create_movies():
+
+        # get the body and put the needed parts into variables
+        body = request.get_json()
+        new_title = body.get('title', None)
+        new_release = body.get('releaseDate', None)
+        search = body.get('search', None)
+
+        try:
+            if search: # Return the search results
+                selection = Movie.query.order_by(Movie.id).filter(
+                    Movie.title.ilike('%{}%'.format(search))).all()
+                movies_json = [movie.format() for movie in selection]
+                return jsonify({
+                    'success': True,
+                    'actors': movies_json
+                })
+            else: #Post a new movie
+                if not(new_title and new_release):
+                    abort(422)
+                else:
+                    movie = Movie(title=new_title,
+                                        releaseDate=new_release)
+                    movie.insert()
+
+                    return jsonify({
+                        'success': True,
+                        'created': movie.id
+                    })
+        except Exception:
+            abort(422)
+
+    @app.route('/movies/<int:movie_id>', methods=['PATCH'])
+    # @requires_auth('patch:movies')
+    def update_movies(movie_id):
+
+        body = request.get_json()  # get the request json to get the body of the request
+
+        movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
+        # if this abort is inside the try/catch then 
+        # it will always bubble up to the except abort
+        if movie is None:  
+            abort(404)  # abort if actor id is not found
+        else:
+            try:
+                # Check what attributes are contained in the body and update accordingly
+                if 'title' in body:
+                    movie.title = body.get('title')
+                if 'releaseDate' in body:
+                    movie.releaseDate = body.get('releaseDate')
+
+                actor.update()
+
+                # return true to let the client know it succedded
+                return jsonify({
+                    'success': True,
+                    'id': movie.id
+                })
+
+            except:
+                abort(422)
 
     # Error handlers********************************************
     @app.errorhandler(404)
