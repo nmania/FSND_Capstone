@@ -48,7 +48,7 @@ class Movie(db.Model):
 
 '''
 Actor
-Has title and release date
+Has name, age, and gender
 '''
 class Actor(db.Model):  
   __tablename__ = 'People'
