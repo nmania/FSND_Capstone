@@ -157,10 +157,10 @@ def create_app(test_config=None):
         try:
             actors = Actor.query.all()
             # Get the short drink for each drink
-            actors_json = [actor.format() for actor in actors]
+            #actors_json = [actor.format() for actor in actors]
             return jsonify({
                 'success': True,
-                'actors': actors_json
+                'actors': 'Fart'
             })
         except Exception:
             abort(422)
