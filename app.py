@@ -146,7 +146,7 @@ def create_app(test_config=None):
         return 'Who farted?'
 
     @app.route('/actors', methods=['GET'])
-    @requires_auth('get:actors')
+    # @requires_auth('get:actors')
     def get_actors(payload):
         try:
             actors = Actor.query.all()
@@ -160,7 +160,7 @@ def create_app(test_config=None):
             abort(422)
 
     @app.route('/movies', methods=['GET'])
-    @requires_auth('get:movies')
+    # @requires_auth('get:movies')
     def get_actors(payload):
         try:
             movies = movie.query.all()
