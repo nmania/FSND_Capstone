@@ -159,6 +159,20 @@ def create_app(test_config=None):
         except Exception:
             abort(422)
 
+    @app.route('/movies', methods=['GET'])
+    @requires_auth('get:movies')
+    def get_actors(payload):
+        try:
+            movies = movie.query.all()
+            # Get the short drink for each drink
+            movies_json = [movies.format() for movie in movies]
+            return jsonify({
+                'success': True,
+                'movies': movies_json
+            })
+        except Exception:
+            abort(422)
+
 
     return app
 
