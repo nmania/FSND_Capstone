@@ -161,7 +161,7 @@ def create_app(test_config=None):
 
     @app.route('/movies', methods=['GET'])
     # @requires_auth('get:movies')
-    def get_actors(payload):
+    def get_movies(payload):
         try:
             movies = movie.query.all()
             # Get the short drink for each drink
