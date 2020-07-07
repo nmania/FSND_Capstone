@@ -153,7 +153,8 @@ def create_app(test_config=None):
     # Actor routes *******************************************
     @app.route('/actors', methods=['GET'])
     # @requires_auth('get:actors')
-    def get_actors(payload):
+    #def get_actors(payload):
+    def get_actors():
         try:
             actors = Actor.query.all()
             # Get the short drink for each drink
