@@ -1,9 +1,6 @@
 --
--- PostgreSQL database dump
+-- PostgreSQL database refresh
 --
-
--- Dumped from database version 11.3
--- Dumped by pg_dump version 11.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -20,26 +17,9 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
--- Movie table
-
-CREATE TABLE public."Movie"
-(
-    id integer NOT NULL DEFAULT nextval('"Movie_id_seq"'::regclass),
-    title character varying COLLATE pg_catalog."default",
-    "releaseDate" timestamp without time zone,
-    CONSTRAINT "Movie_pkey" PRIMARY KEY (id)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE public."Movie"
-    OWNER to postgres;
-
---
--- Data for Movie
---
-
-INSERT INTO public."Movie" (title, releaseDate)
+--Refresh the movie data
+DELETE FROM public."Movie";
+INSERT INTO public."Movie" (title, "releaseDate")
 VALUES ('Chess Till Death','2001-09-28'),
 ('Banana for Size','1985-07-01'),
 ('Vampire Banidits','2011-01-20'),
@@ -47,27 +27,8 @@ VALUES ('Chess Till Death','2001-09-28'),
 ('Who let the Dogs Out? Who? Who?','2000-07-26');
 
 
--- Actor table
-
-CREATE TABLE public."Actor"
-(
-    id integer NOT NULL DEFAULT nextval('"Actor_id_seq"'::regclass),
-    name character varying COLLATE pg_catalog."default",
-    age integer,
-    gender character varying COLLATE pg_catalog."default",
-    CONSTRAINT "Actor_pkey" PRIMARY KEY (id)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE public."Actor"
-    OWNER to postgres;
-
-
---
--- Data for Actor
---
-
+-- Refresh the actor data
+DELETE FROM public."Actor";
 INSERT INTO public."Actor" (name, age, gender)
 VALUES ('Ted Merril', 22, 'Male'),
 ('Sheryl Kazinzky', 53, 'Female'),
