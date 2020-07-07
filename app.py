@@ -150,6 +150,7 @@ def create_app(test_config=None):
         if excited == 'true': greeting = greeting + "!!!!!"
         return greeting
 
+    #DELETE THIS
     @app.route('/farts')
     def get_test():
         return 'Who farted?'
