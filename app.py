@@ -133,6 +133,15 @@ def create_app(test_config=None):
     setup_db(app)
     CORS(app)
 
+    # CORS Headers 
+    @app.after_request #app decorator that adds headers to the response (i.e. after request)
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Headers',
+                             'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods',
+                             'GET,PATCH,POST,DELETE,OPTIONS')
+        return response
+
     # For the general IP
     @app.route('/')
     def get_greeting():
@@ -145,6 +154,7 @@ def create_app(test_config=None):
     def get_test():
         return 'Who farted?'
 
+    # Actor routes *******************************************
     @app.route('/actors', methods=['GET'])
     # @requires_auth('get:actors')
     def get_actors(payload):
@@ -159,6 +169,91 @@ def create_app(test_config=None):
         except Exception:
             abort(422)
 
+    @app.route('/actors/<int:actor_id>', methods=['DELETE'])
+    # @requires_auth('delete:actors')
+    def delete_actor(actor_id):
+
+        actor = Actor.query.filter(
+            Actor.id == actor_id).one_or_none()
+
+        if actor is None:
+            abort(404)  # abort if question id is not found
+        else:
+            try:
+                actor.delete()
+                # return actor id that was deleted
+                return jsonify({
+                    'success': True,
+                    'deleted': actor_id,
+                })
+            except Exception:
+                abort(422)
+
+    @app.route('/actors', methods=['POST'])
+    # @requires_auth('post:actors')
+    def create_actor():
+
+        # get the body and put the needed parts into variables
+        body = request.get_json()
+        new_name = body.get('name', None)
+        new_age = body.get('age', None)
+        new_gender = body.get('gender', None)
+
+        try:  # If a search term was included, then return the search results
+            if not(new_name and new_age
+                    and new_gender):
+                abort(422)
+            else:
+                actor = Actor(name=new_name,
+                                    age=new_age,
+                                    gender=new_gender)
+                actor.insert()
+
+                return jsonify({
+                    'success': True,
+                    'created': actor.id
+                })
+        except Exception:
+            abort(422)
+
+    @app.route('/actors/<int:actor_id>', methods=['PATCH'])
+    # @requires_auth('patch:actors')
+    def update_actor(actor_id):
+
+        body = request.get_json()  # get the request json to get the body of the request
+
+        actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
+        # if this abort is inside the try/catch then 
+        # it will always bubble up to the except abort
+        if actor is None:  
+            abort(404)  # abort if actor id is not found
+        else:
+            try:
+                # Check what attributes are contained in the body and update accordingly
+                if 'name' in body:
+                    actor.name = body.get('name')
+
+                # Check what attributes are contained in the body and update accordingly
+                if 'age' in body:
+                    # body data is a string, so this must be coerced into an int
+                    actor.age = int(body.get('age'))
+
+                if 'gender' in body:
+                    actor.gender = body.get('gender')
+
+                actor.update()
+
+                # return true to let the client know it succedded
+                return jsonify({
+                    'success': True,
+                    'id': actor.id
+                })
+
+            except:
+                abort(422)
+
+
+    # Movie routes *****************************************
     @app.route('/movies', methods=['GET'])
     # @requires_auth('get:movies')
     def get_movies(payload):
@@ -172,6 +267,43 @@ def create_app(test_config=None):
             })
         except Exception:
             abort(422)
+
+    # Error handlers********************************************
+    @app.errorhandler(404)
+    def not_found(error):
+        return jsonify({
+            "success": False,
+            "error": 404,
+            "message": "Resource Not Found",
+            "sys_error": str(error)
+        }), 404
+
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({
+            "success": False,
+            "error": 422,
+            "message": "Unprocessable",
+            "sys_error": str(error)
+        }), 422
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            "success": False,
+            "error": 400,
+            "message": "Bad Request",
+            "sys_error": str(error)
+        }), 400
+
+    @app.errorhandler(405)
+    def not_allowed(error):
+        return jsonify({
+            "success": False,
+            "error": 405,
+            "message": "Request not allowed",
+            "sys_error": str(error)
+        }), 405
 
 
     return app
