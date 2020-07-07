@@ -5,10 +5,6 @@ import os
 import babel
 
 database_path = os.environ.get('DATABASE_URL')
-#database_path = "postgresql://postgres@localhost:5432/example"
-# if not database_path:
-#     database_name = "test"
-#     database_path = "postgres://{}/{}".format('localhost:5432', database_name)
 
 db = SQLAlchemy()
 
