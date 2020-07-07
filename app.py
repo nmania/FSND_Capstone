@@ -156,7 +156,7 @@ def create_app(test_config=None):
     #def get_actors(payload):
     def get_actors():
         try:
-            actors = Actor.query.all()
+            # actors = Actor.query.all()
             # Get the short drink for each drink
             #actors_json = [actor.format() for actor in actors]
             return jsonify({
