@@ -120,8 +120,8 @@ To leave the virtual environment, run:
 ## Testing
 To run the tests, run
 ```
-dropdb casting_test
-createdb casting_test
-psql casting_test < casting.psql
+dropdb capstone_test
+createdb capstone_test
+psql capstone_test < capstone.psql
 python test_app.py
 ```
