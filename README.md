@@ -116,3 +116,12 @@ Check to see if its running, run:
 It should display something allong the lines of (...env\Scripts\python.exe) if it's running.
 To leave the virtual environment, run:
     deactivate
+
+## Testing
+To run the tests, run
+```
+dropdb casting_test
+createdb casting_test
+psql casting_test < casting.psql
+python test_app.py
+```
