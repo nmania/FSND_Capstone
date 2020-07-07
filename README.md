@@ -1,4 +1,10 @@
 # Notes
+
+To refresh the data in the database use
+```
+psql capstone < capstone.psql
+```
+
 To create a requirements.txt file and add to it use:
 pip freeze > requirements.txt
 after every time a requirment is installed
@@ -122,6 +128,6 @@ To run the tests, run
 ```
 dropdb capstone_test
 createdb capstone_test
-psql capstone_test < capstone.psql
+psql capstone_test < capstone_test.psql
 python test_app.py
 ```
