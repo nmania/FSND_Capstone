@@ -131,3 +131,22 @@ createdb capstone_test
 psql capstone_test < capstone_test.psql
 python test_app.py
 ```
+
+
+## Running the server
+
+From within this directory first ensure you are working using your created virtual environment.
+
+Each time you open a new terminal session, run:
+
+```bash
+export FLASK_APP=app.py;
+```
+
+To run the server, execute:
+
+```bash
+flask run --reload
+```
+
+The `--reload` flag will detect file changes and restart the server automatically.
