@@ -1,6 +1,6 @@
 import os
 from functools import wraps
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, abort
 from models import setup_db, Actor, Movie
 from flask_cors import CORS
 import json
@@ -157,12 +157,12 @@ def create_app(test_config=None):
     #def get_actors(payload):
     def get_actors():
         try:
-            # actors = Actor.query.all()
+            actors = Actor.query.all()
             # Get the short drink for each drink
-            #actors_json = [actor.format() for actor in actors]
+            actors_json = [actor.format() for actor in actors]
             return jsonify({
                 'success': True,
-                'actors': 'Fart'
+                'actors': actors_json
             })
         except Exception:
             abort(422)
@@ -173,7 +173,7 @@ def create_app(test_config=None):
 
         actor = Actor.query.filter(
             Actor.id == actor_id).one_or_none()
-
+        
         if actor is None:
             abort(404)  # abort if id is not found
         else:
@@ -189,7 +189,7 @@ def create_app(test_config=None):
 
     @app.route('/actors', methods=['POST'])
     # @requires_auth('post:actors')
-    def create_actor():
+    def post_actor():
 
         # get the body and put the needed parts into variables
         body = request.get_json()
@@ -197,7 +197,7 @@ def create_app(test_config=None):
         new_age = body.get('age', None)
         new_gender = body.get('gender', None)
         search = body.get('search', None)
-
+        
         try:
             if search: # Return the search results
                 selection = Actor.query.order_by(Actor.id).filter(
@@ -216,7 +216,6 @@ def create_app(test_config=None):
                                         age=new_age,
                                         gender=new_gender)
                     actor.insert()
-
                     return jsonify({
                         'success': True,
                         'created': actor.id
@@ -227,7 +226,6 @@ def create_app(test_config=None):
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
     # @requires_auth('patch:actors')
     def update_actor(actor_id):
-
         body = request.get_json()  # get the request json to get the body of the request
 
         actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
@@ -286,7 +284,7 @@ def create_app(test_config=None):
         else:
             try:
                 movie.delete()
-                # return actor id that was deleted
+                # return movie id that was deleted
                 return jsonify({
                     'success': True,
                     'deleted': movie_id
@@ -297,7 +295,7 @@ def create_app(test_config=None):
 
     @app.route('/movies', methods=['POST'])
     # @requires_auth('post:movies')
-    def create_movies():
+    def post_movies():
 
         # get the body and put the needed parts into variables
         body = request.get_json()
@@ -312,7 +310,7 @@ def create_app(test_config=None):
                 movies_json = [movie.format() for movie in selection]
                 return jsonify({
                     'success': True,
-                    'actors': movies_json
+                    'movies': movies_json
                 })
             else: #Post a new movie
                 if not(new_title and new_release):
@@ -334,12 +332,11 @@ def create_app(test_config=None):
     def update_movies(movie_id):
 
         body = request.get_json()  # get the request json to get the body of the request
-
         movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
         # if this abort is inside the try/catch then 
         # it will always bubble up to the except abort
         if movie is None:  
-            abort(404)  # abort if actor id is not found
+            abort(404)  # abort if movie id is not found
         else:
             try:
                 # Check what attributes are contained in the body and update accordingly
@@ -348,7 +345,7 @@ def create_app(test_config=None):
                 if 'releaseDate' in body:
                     movie.releaseDate = body.get('releaseDate')
 
-                actor.update()
+                movie.update()
 
                 # return true to let the client know it succedded
                 return jsonify({
