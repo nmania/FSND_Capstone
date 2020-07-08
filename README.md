@@ -150,3 +150,70 @@ flask run --reload
 ```
 
 The `--reload` flag will detect file changes and restart the server automatically.
+
+
+### Setup Auth0
+
+1. Create a new Auth0 Account
+2. Select a unique tenant domain
+    - roofuseat.us.auth0.com
+3. Create a new, single page web application
+    - Name: capstone
+    - ClientID: iBZEqTPtTRIsnCwl3YlQSzMZb9zwZ01j
+4. Create a new API
+    - Name: capstone
+    - Identifier: capstone
+    - in API Settings:
+        - Enable RBAC
+        - Enable Add Permissions in the Access Token
+5. Create new API permissions:
+    - `get:actors`
+    - `get:movies`
+    - `delete:actors`
+    - `delete:movies`
+    - `post:actors`
+    - `post:movies`
+    - `patch:actors`
+    - `patch:movies`
+6. Create new roles for:
+    - Casting Assistant
+        - `get:actors`
+        - `get:movies`
+    - Casting Director 
+        - All actions of a casting assistant plus
+        - `delete:actors`
+        - `post:actors`
+        - `patch:actors`
+        - `patch:movies`
+    - Executive Producer
+        - All actions of a casting director plus
+        - `delete:movies`
+        - `post:movies`
+7. Test your endpoints with [Postman](https://getpostman.com). 
+    - Register 3 users - assign the assistant, director, and producer.
+         - Not ideal for an actual API, but here are the test users:
+            - assistant@test.com 1234asdfQWER
+            - director@test.com 1234asdfQWER
+            - producer@test.com 1234asdfQWER
+    - Sign into each account and make note of the JWT.
+    - Import the postman collection `./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`
+    - Right-clicking the collection folder for barista and manager, navigate to the authorization tab, and 
+        including the JWT in the token field (you should have noted these JWTs).
+    - Run the collection and correct any errors.
+    - Export the collection overwriting the one we've included so that we have your proper JWTs during review!
+
+To get the jwt use
+https://{{YOUR_DOMAIN}}/authorize?audience={{API_IDENTIFIER}}&response_type=token&client_id={{YOUR_CLIENT_ID}}&
+redirect_uri={{YOUR_CALLBACK_URI}}
+For this project use: https://roofuseat.us.auth0.com/authorize?audience=capstone&response_type=token&client_id=iBZEqTPtTRIsnCwl3YlQSzMZb9zwZ01j&redirect_uri=https://localhost:8100/
+Go to that url, login, and retrive the jwt from the url after login.
+Use this in a private browser session to prevent auto sign in
+
+Clock is not an attribute of the time module.  Error in sqlalchemy.  To fix change the following:
+in backend\env\Lib\site-packages\sqlalchemy\util\compat.py
+replace time_func = time.clock
+with time_func = time.perf_counter
+
+Barista: https://localhost:8100/tabs/user-page#access_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Im5abkRKUkhQUmhMZnY0US13Y3VyMyJ9.eyJpc3MiOiJodHRwczovL3Jvb2Z1c2VhdC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWVmMzhiM2U3Nzk3YzEwMDEzNzAyMTNkIiwiYXVkIjoiY29mZmVlIiwiaWF0IjoxNTkzMTg1NDk3LCJleHAiOjE1OTMyNzE4OTcsImF6cCI6ImRKUmVhSXJ4YlVibTBrRlJsaVZ5ME5Kc2lqbEtWUzBmIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6ZHJpbmtzLWRldGFpbCJdfQ.0hp_Ylj_NzHAdp6VlUDiLqvZ_qkdCSV19He53YO5ZLb2kDwu9ajcIhSHEDXXrCxN5Y6-VWr4SREMDYxyttJiny40tx268l25LOIaDzZ0k6QNb4wy2Dv2OUKeQ175aYRsTLosJruL159jw7bMVVcIZFykIMtGCcKfNW0kkYBAcQ_B-yiKiW2Ng_o9NnZv5uDGgveqFG5uA3vaKjZqhGK95dq8edvsiF7rZm_3k2AqtW3mx-o8amjDmJnWFdSz0GaJ2cRorN92zpKiR-L9J7SY1ERuSqVreF89bQmYPrmASO8-5lG9FOPtTAIguEGn6C9tE7zy9k1kL_xK9y3X74-zvg&expires_in=86400&token_type=Bearer
+
+Manager: https://localhost:8100/tabs/user-page#access_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Im5abkRKUkhQUmhMZnY0US13Y3VyMyJ9.eyJpc3MiOiJodHRwczovL3Jvb2Z1c2VhdC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWVmMzhiNjI3Nzk3YzEwMDEzNzAyMTNmIiwiYXVkIjoiY29mZmVlIiwiaWF0IjoxNTkzMTg1NTMxLCJleHAiOjE1OTMyNzE5MzEsImF6cCI6ImRKUmVhSXJ4YlVibTBrRlJsaVZ5ME5Kc2lqbEtWUzBmIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6ZHJpbmtzIiwiZ2V0OmRyaW5rcy1kZXRhaWwiLCJwYXRjaDpkcmlua3MiLCJwb3N0OmRyaW5rcyJdfQ.OMCRTex0PW2eco-iCCLxA2eoNUBFHpFs1v81V7DfxjPTCcIl97yb4qSFegRgMnARrT-QgxB5uajfiFp3XbCKmcG7PWtfDxb9QOwk6SaWpLbddhgFngyAOVIn9J4F0jGW74YDwoG1SPGAD18XkNZ9uvnXk1jCP9hZ6QIj8W9Soq2T82uXc6AUy6_qKAi7_NRWPahWsKtOn8NILU3hebqxwinbjU7GgQZY2w0OR6IYqWhF_sYBHiWhkfSTOnnuQgQYZkiwYS2IOp9LEdkJNRt4CpOPRiaIubt3fEboPzqL3zGXet6U-bmddCzDzX1wBXBkj-L4SksQEsweYC9XI3uDQQ&expires_in=86400&token_type=Bearer

@@ -153,9 +153,8 @@ def create_app(test_config=None):
 
     # Actor routes *******************************************
     @app.route('/actors', methods=['GET'])
-    # @requires_auth('get:actors')
-    #def get_actors(payload):
-    def get_actors():
+    @requires_auth('get:actors')
+    def get_actors(payload):
         try:
             actors = Actor.query.all()
             # Get the short drink for each drink
@@ -168,8 +167,8 @@ def create_app(test_config=None):
             abort(422)
 
     @app.route('/actors/<int:actor_id>', methods=['DELETE'])
-    # @requires_auth('delete:actors')
-    def delete_actor(actor_id):
+    @requires_auth('delete:actors')
+    def delete_actor(payload,actor_id):
 
         actor = Actor.query.filter(
             Actor.id == actor_id).one_or_none()
@@ -188,8 +187,8 @@ def create_app(test_config=None):
                 abort(422)
 
     @app.route('/actors', methods=['POST'])
-    # @requires_auth('post:actors')
-    def post_actor():
+    @requires_auth('post:actors')
+    def post_actor(payload):
 
         # get the body and put the needed parts into variables
         body = request.get_json()
@@ -224,8 +223,8 @@ def create_app(test_config=None):
             abort(422)
 
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
-    # @requires_auth('patch:actors')
-    def update_actor(actor_id):
+    @requires_auth('patch:actors')
+    def update_actor(payload,actor_id):
         body = request.get_json()  # get the request json to get the body of the request
 
         actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
@@ -258,9 +257,8 @@ def create_app(test_config=None):
 
     # Movie routes *****************************************
     @app.route('/movies', methods=['GET'])
-    # @requires_auth('get:movies')
-    # def get_movies(payload):
-    def get_movies():
+    @requires_auth('get:movies')
+    def get_movies(payload):
         try:
             movies = Movie.query.all()
             # Get the descriptions of each movie
@@ -273,8 +271,8 @@ def create_app(test_config=None):
             abort(422)
 
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
-    # @requires_auth('delete:movies')
-    def delete_movie(movie_id):
+    @requires_auth('delete:movies')
+    def delete_movie(payload,movie_id):
 
         movie = Movie.query.filter(
             Movie.id == movie_id).one_or_none()
@@ -294,8 +292,8 @@ def create_app(test_config=None):
 
 
     @app.route('/movies', methods=['POST'])
-    # @requires_auth('post:movies')
-    def post_movies():
+    @requires_auth('post:movies')
+    def post_movies(payload):
 
         # get the body and put the needed parts into variables
         body = request.get_json()
@@ -328,8 +326,8 @@ def create_app(test_config=None):
             abort(422)
 
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
-    # @requires_auth('patch:movies')
-    def update_movies(movie_id):
+    @requires_auth('patch:movies')
+    def update_movies(payload,movie_id):
 
         body = request.get_json()  # get the request json to get the body of the request
         movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
