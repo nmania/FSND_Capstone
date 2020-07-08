@@ -1,8 +1,9 @@
 import os
 from functools import wraps
-from flask import Flask
-from models import setup_db
+from flask import Flask, jsonify
+from models import setup_db, Actor, Movie
 from flask_cors import CORS
+import json
 
 # for auth zero
 AUTH0_DOMAIN = 'roofuseat.us.auth0.com'
@@ -260,9 +261,10 @@ def create_app(test_config=None):
     # Movie routes *****************************************
     @app.route('/movies', methods=['GET'])
     # @requires_auth('get:movies')
-    def get_movies(payload):
+    # def get_movies(payload):
+    def get_movies():
         try:
-            movies = movie.query.all()
+            movies = Movie.query.all()
             # Get the descriptions of each movie
             movies_json = [movie.format() for movie in movies]
             return jsonify({
