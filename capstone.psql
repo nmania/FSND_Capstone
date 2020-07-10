@@ -1,5 +1,5 @@
 --
--- PostgreSQL database refresh
+-- PostgreSQL database dump for testing
 --
 
 SET statement_timeout = 0;
@@ -17,8 +17,38 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
---Refresh the movie data
-DELETE FROM public."Movie";
+-- Movie table sequence
+
+-- CREATE SEQUENCE public."Movie_id_seq"
+--     INCREMENT 1
+--     START 1
+--     MINVALUE 1
+--     MAXVALUE 2147483647
+--     CACHE 1;
+
+-- ALTER SEQUENCE public."Movie_id_seq"
+--     OWNER TO postgres;
+
+-- Movie table
+
+CREATE TABLE public."Movie"
+(
+    --id integer NOT NULL DEFAULT nextval('"Movie_id_seq"'::regclass),
+    id SERIAL,
+    title character varying COLLATE pg_catalog."default",
+    "releaseDate" timestamp without time zone,
+    CONSTRAINT "Movie_pkey" PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."Movie"
+    OWNER to postgres;
+
+--
+-- Data for Movie
+--
+
 INSERT INTO public."Movie" (title, "releaseDate")
 VALUES ('Chess Till Death','2001-09-28'),
 ('Banana for Size','1985-07-01'),
@@ -26,9 +56,40 @@ VALUES ('Chess Till Death','2001-09-28'),
 ('Strange Brew','1983-08-26'),
 ('Who let the Dogs Out? Who? Who?','2000-07-26');
 
+-- Actor table sequence
 
--- Refresh the actor data
-DELETE FROM public."Actor";
+-- CREATE SEQUENCE public."Actor_id_seq"
+--     INCREMENT 1
+--     START 1
+--     MINVALUE 1
+--     MAXVALUE 2147483647
+--     CACHE 1;
+
+-- ALTER SEQUENCE public."Actor_id_seq"
+--     OWNER TO postgres;
+
+-- Actor table
+
+CREATE TABLE public."Actor"
+(
+    --id integer NOT NULL DEFAULT nextval("Actor_id_seq"::regclass),
+    id SERIAL,
+    name character varying COLLATE pg_catalog."default",
+    age integer,
+    gender character varying COLLATE pg_catalog."default",
+    CONSTRAINT "Actor_pkey" PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."Actor"
+    OWNER to postgres;
+
+
+--
+-- Data for Actor
+--
+
 INSERT INTO public."Actor" (name, age, gender)
 VALUES ('Ted Merril', 22, 'Male'),
 ('Sheryl Kazinzky', 53, 'Female'),
