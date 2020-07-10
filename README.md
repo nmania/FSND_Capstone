@@ -77,7 +77,7 @@ python test_app.py
 ## RBAC Role Testing
 *** NOTE jwts provided for these tests only last 24 hours after submission!\
 In Postman, import the file 
-- udacity_Capstone.postman_collection.json
+- udacity_Capstone.postman_collection.json\
 Run the tests in that to check if the roles are working properly.
 
 ## Heroku
@@ -227,7 +227,7 @@ PATCH /movies/${id}
 ```
 
 ### Auth0 Roles
-API permissions:\
+- API permissions:\
     - `get:actors`: Can access the route GET '/actors'\
     - `get:movies`:  Can access the route GET '/movies'\
     - `delete:actors`: Can access the routeDELETE /actors/${id}\
@@ -236,7 +236,7 @@ API permissions:\
     - `post:movies`: Can access the routePOST /movies\
     - `patch:actors`: Can access the routePATCH /actors/${id}\
     - `patch:movies`: Can access the routePATCH /movies/${id}\
-Roles:\
+- Roles:\
     - Casting Assistant\
         - `get:actors`\
         - `get:movies`\
