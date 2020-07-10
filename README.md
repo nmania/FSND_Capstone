@@ -10,19 +10,29 @@ Follow instructions to install the latest version of python for your platform in
 
 #### Virtual Enviornment
 On Windows, run the following:
+```
     py -m pip install --user virtualenv
     py -m venv venv
+```
 The last variable above is the name of the virtual environment.  In this case 'venv'
 Then add the venv folder to the gitignore
 Then activate the virtual environment by running:
+```
     .\venv\Scripts\activate
+```
 If the above doesn't work, use:
+```
     source venv/Scripts/activate
+```
 Check to see if its running, run:
+```
     where python
+```
 It should display something allong the lines of (...venv\Scripts\python.exe) if it's running.
 To leave the virtual environment, run:
+```
     deactivate
+```
 
 #### PIP Dependencies
 Once you have your virtual environment setup and running, install dependencies by running:
