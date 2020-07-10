@@ -69,30 +69,20 @@ def create_app(test_config=None):
         new_name = body.get('name', None)
         new_age = body.get('age', None)
         new_gender = body.get('gender', None)
-        search = body.get('search', None)
         
         try:
-            if search: # Return the search results
-                selection = Actor.query.order_by(Actor.id).filter(
-                    Actor.name.ilike('%{}%'.format(search))).all()
-                actors_json = [actor.format() for actor in selection]
+            if not(new_name and new_age
+                    and new_gender):
+                abort(422)
+            else:
+                actor = Actor(name=new_name,
+                                    age=new_age,
+                                    gender=new_gender)
+                actor.insert()
                 return jsonify({
                     'success': True,
-                    'actors': actors_json
+                    'created': actor.id
                 })
-            else: #Post a new actor
-                if not(new_name and new_age
-                        and new_gender):
-                    abort(422)
-                else:
-                    actor = Actor(name=new_name,
-                                        age=new_age,
-                                        gender=new_gender)
-                    actor.insert()
-                    return jsonify({
-                        'success': True,
-                        'created': actor.id
-                    })
         except Exception:
             abort(422)
 
@@ -173,29 +163,19 @@ def create_app(test_config=None):
         body = request.get_json()
         new_title = body.get('title', None)
         new_release = body.get('releaseDate', None)
-        search = body.get('search', None)
 
         try:
-            if search: # Return the search results
-                selection = Movie.query.order_by(Movie.id).filter(
-                    Movie.title.ilike('%{}%'.format(search))).all()
-                movies_json = [movie.format() for movie in selection]
+            if not(new_title and new_release):
+                abort(422)
+            else:
+                movie = Movie(title=new_title,
+                                    releaseDate=new_release)
+                movie.insert()
+
                 return jsonify({
                     'success': True,
-                    'movies': movies_json
+                    'created': movie.id
                 })
-            else: #Post a new movie
-                if not(new_title and new_release):
-                    abort(422)
-                else:
-                    movie = Movie(title=new_title,
-                                        releaseDate=new_release)
-                    movie.insert()
-
-                    return jsonify({
-                        'success': True,
-                        'created': movie.id
-                    })
         except Exception:
             abort(422)
 
