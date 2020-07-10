@@ -4,7 +4,6 @@ from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 
-
 # for auth zero
 AUTH0_DOMAIN = 'roofuseat.us.auth0.com'
 ALGORITHMS = ['RS256']
