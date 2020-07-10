@@ -11,27 +11,27 @@ Follow instructions to install the latest version of python for your platform in
 #### Virtual Enviornment
 On Windows, run the following:
 ```
-    py -m pip install --user virtualenv
-    py -m venv venv
+py -m pip install --user virtualenv
+py -m venv venv
 ```
 The last variable above is the name of the virtual environment.  In this case 'venv'
 Then add the venv folder to the gitignore
 Then activate the virtual environment by running:
 ```
-    .\venv\Scripts\activate
+.\venv\Scripts\activate
 ```
 If the above doesn't work, use:
 ```
-    source venv/Scripts/activate
+source venv/Scripts/activate
 ```
 Check to see if its running, run:
 ```
-    where python
+where python
 ```
 It should display something allong the lines of (...venv\Scripts\python.exe) if it's running.
 To leave the virtual environment, run:
 ```
-    deactivate
+deactivate
 ```
 
 #### PIP Dependencies
@@ -66,7 +66,7 @@ flask run --reload
 
 ## Unit Testing
 *** NOTE jwts provided for these tests only last 24 hours after submission!\
-To run the unit tests, run
+To run the unit tests, run:
 ```
 dropdb capstone_test
 createdb capstone_test
@@ -76,7 +76,7 @@ python test_app.py
 
 ## RBAC Role Testing
 *** NOTE jwts provided for these tests only last 24 hours after submission!\
-In Postman, import the file 
+In Postman, import the file:
 - udacity_Capstone.postman_collection.json
 \
 Run the tests in that to check if the roles are working properly.
