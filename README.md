@@ -1,159 +1,250 @@
-# Notes
+# Full Stack Nanodegree Capstone Project
 
-To refresh the data in the database use
-```
-psql capstone < capstone.psql
-```
+## Getting Started
 
-To create a requirements.txt file and add to it use:
-pip freeze > requirements.txt
-after every time a requirment is installed
+### Installing Dependencies
 
-This project will need the following:
-    pip install flask_script
-    pip install flask_migrate
-    pip install psycopg2-binary
-    pip install gunicorn
+#### Python 3.7
 
-Create a file named Procfile that contains the following:
-    web: gunicorn app:app
-This instructs Heroku.  Make sure you're main app is named app.py
+Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
 
-Create a file named manage.py that contains the following:
-```
-from flask_script import Manager
-from flask_migrate import Migrate, MigrateCommand
-
-from app import app
-from models import db
-
-migrate = Migrate(app, db)
-manager = Manager(app)
-
-manager.add_command('db', MigrateCommand)
-
-
-if __name__ == '__main__':
-    manager.run()
-```
-
-Create a file named setup.sh with your environmental variables.
-Then point to it by running the following command:
-```
-source setup.sh
-```
-
-Next run the local migrations using the following:
-```
-python manage.py db init
-python manage.py db migrate
-python manage.py db upgrade
-```
-
-Next login to Heroku with
-```
-heroku login
-```
-Then create a new app with (replacing app-name):
-```
-heroku create app-name
-```
-
-I named my app, hiltz-fsnd-capstone
-The output will display a url for the app.
-In this case it was:
-<https://hiltz-fsnd-capstone.herokuapp.com/ >
-and
-<https://git.heroku.com/hiltz-fsnd-capstone.git>
-
-Using the git url from above, add a remote using:
-```
-git remote add heroku heroku_git_url
-```
-
-If you recive an error it might be because the remote was already added.
-Check to see using:
-```
-git remote -v
-```
-
-
-Next add the postgres addon to your Heroku upp:
-```
-heroku addons:create heroku-postgresql:hobby-dev --app hiltz-fsnd-capstone
-```
-heroku-postgresql is the name of the addon. hobby-dev on the other hand specifies the tier of the addon, in this case the free version which has a limit on the amount of data it will store, albeit fairly high.
-
-Double check that it installed with this:
-```
-heroku config --app hiltz-fsnd-capstone
-```
-That will also give you the database URL for the heroku instance.
-
-In the browser, go to your Heroku Dashboard (heroku.com) and access your application's settings. Reveal your config variables and start adding all the required environment variables for your project. For the purposes of the sample project, just add one additional one - ‘EXCITED’ and set it to true or false in all lowercase.
-
-Now push it:
-```
-git push heroku master
-```
-
-After it is running, you can run migrations using:
-```
-heroku run python manage.py db upgrade --app hiltz-fsnd-capstone
-```
-
-To test out the app, go to your dashboard an run the app.
-
-
-Clock is not an attribute of the time module.  Error in sqlalchemy.  To fix change the following:
-in backend\env\Lib\site-packages\sqlalchemy\util\compat.py
-replace time_func = time.clock
-with time_func = time.perf_counter
-
-# Virtual Enviornment Creation and Use
-
-We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
-
+#### Virtual Enviornment
 On Windows, run the following:
     py -m pip install --user virtualenv
     py -m venv venv
 The last variable above is the name of the virtual environment.  In this case 'venv'
-Then add the env folder to the gitignore
+Then add the venv folder to the gitignore
 Then activate the virtual environment by running:
     .\venv\Scripts\activate
 If the above doesn't work, use:
     source venv/Scripts/activate
 Check to see if its running, run:
     where python
-It should display something allong the lines of (...env\Scripts\python.exe) if it's running.
+It should display something allong the lines of (...venv\Scripts\python.exe) if it's running.
 To leave the virtual environment, run:
     deactivate
 
-## Testing
-To run the tests, run
-```
-dropdb capstone_test
-createdb capstone_test
-psql capstone_test < capstone_test.psql
-python test_app.py
-```
-
-
-## Running the server
-
-From within this directory first ensure you are working using your created virtual environment.
-
-Each time you open a new terminal session, run:
+#### PIP Dependencies
+Once you have your virtual environment setup and running, install dependencies by running:
 
 ```bash
-export FLASK_APP=app.py;
+pip install -r requirements.txt
 ```
 
+This will install all of the required packages we selected within the `requirements.txt` file.
+
+## Database Setup
+With Postgres running, create a database using the capstone.psql file provided by running:
+```bash
+dropdb capstone
+createdb capstone
+psql capstone < capstone_test.psql
+```
+
+## Running the server
+Ensure you are working using your created virtual environment.
+Set the source to setup.sh
+```bash
+source setup.sh
+```
 To run the server, execute:
 
 ```bash
+export FLASK_APP=app.py
 flask run --reload
 ```
 
-The `--reload` flag will detect file changes and restart the server automatically.
+## Unit Testing
+*** NOTE jwts provided for these tests only last 24 hours after submission!
+To run the unit tests, run
+```
+dropdb capstone_test
+createdb capstone_test
+psql capstone_test < capstone.psql
+python test_app.py
+```
+
+## RBAC Role Testing
+*** NOTE jwts provided for these tests only last 24 hours after submission!
+In Postman, import the file
+    - udacity Capstone.postman_collection.json
+Run the tests in that to check if the roles are working properly.
+
+## Heroku
+To see the app on Heroku go to: 
+    - https://hiltz-fsnd-capstone.herokuapp.com/
+
+## Endpoints
+```
+GET /actors
+GET /movies
+POST /actors
+POST /movies
+DELETE /actors/${id}
+DELETE /movies/${id}
+PATCH /actors/${id}
+PATCH /movies/${id}
+```
+
+### GET '/actors'
+- Fetches all the actors in the database.
+- Request Arguments: None
+- Returns: JSON object with actor details. 
+```
+{
+    "actors": [
+        {
+            "age": 67,
+            "gender": "Female",
+            "id": 5,
+            "name": "Sharron McDuffy"
+        }
+    "success": true
+}
+```
+
+### GET /movies
+- Fetches all the movies in the database.
+- Request Arguments: None
+- Returns: JSON object with movie details. 
+```
+{
+    "movies": [
+        {
+            "id": 1,
+            "releaseDate": "Fri, 28 Sep 2001 00:00:00 GMT",
+            "title": "Chess Till Death"
+        }
+    ],
+    "success": true
+}
+```
+
+### POST /actors
+- Creates a new actor
+- New actor json should be formatted as such:
+```
+{
+    "name": "Wally Walter",
+    "age": 75,
+    "gender": "Male"
+}
+```
+- Returns 422 if not all required fields are present (name, age, gender)
+- Otherwise returns the id of the newly created actor as such:
+```
+{
+    "created": 8,
+    "success": true
+}
+```
+
+### POST /movies
+- Creates a new movie
+- New movie json should be formatted as such:
+```
+{
+    "title": "Hey You Guys: The Movie",
+    "releaseDate": "Thu, 20 Jan 2021 00:00:00 GMT"
+}
+```
+- Returns 422 if not all required fields are present (title, releaseDate)
+- Otherwise returns the id of the newly created actor as such:
+```
+{
+    "created": 7,
+    "success": true
+}
+```
+
+### DELETE /actors/${id}
+- Deletes the actor with the unique id given in the uri 
+- Returns response 404 if actor doesn't exist
+- Returns response 422 if there was a problem deleting the actor
+- Returns a json object with the id of the actor deleted: 
+```
+{
+    "deleted": 5,
+    "success": true
+}
+```
+
+### DELETE /movies/${id}
+- Deletes the movie with the unique id given in the uri
+- Returns response 404 if movie doesn't exist
+- Returns response 422 if there was a problem deleting the movie
+- Returns a json object with the id of the movie deleted: 
+```
+{
+    "deleted": 2,
+    "success": true
+}
+```
+
+### PATCH /actors/${id}
+- Updates the actor with the unique id given in the uri 
+- Update should be formatted as such and can use any valid field from the actor table:
+```
+{
+    "name": "Ted Tedders"
+}
+```
+- Returns response 404 if actor doesn't exist
+- Returns response 422 if there was a problem updating the actor
+- Returns a json object with the id of the actor updated: 
+```
+{
+    "id": 5,
+    "success": true
+}
+```
+
+### PATCH /movies/${id}
+- Updates the movie with the unique id given in the uri 
+- Update should be formatted as such and can use any valid field from the movie table:
+```
+{
+    "title": "Fight People 5"
+}
+```
+- Returns response 404 if movie doesn't exist
+- Returns response 422 if there was a problem updating the movie
+- Returns a json object with the id of the movie updated: 
+```
+{
+    "id": 3,
+    "success": true
+}
+```
+
+### Auth0 Roles
+API permissions:
+    - `get:actors`: Can access the route GET '/actors'
+    - `get:movies`:  Can access the route GET '/movies'
+    - `delete:actors`: Can access the routeDELETE /actors/${id}
+    - `delete:movies`: Can access the routeDELETE /movies/${id}
+    - `post:actors`: Can access the routePOST /actors
+    - `post:movies`: Can access the routePOST /movies
+    - `patch:actors`: Can access the routePATCH /actors/${id}
+    - `patch:movies`: Can access the routePATCH /movies/${id}
+Roles:
+    - Casting Assistant
+        - `get:actors`
+        - `get:movies`
+    - Casting Director 
+        - All actions of a casting assistant plus
+        - `delete:actors`
+        - `post:actors`
+        - `patch:actors`
+        - `patch:movies`
+    - Executive Producer
+        - All actions of a casting director plus
+        - `delete:movies`
+        - `post:movies`
+
+To get the jwt from Auth0 use
+https://{{YOUR_DOMAIN}}/authorize?audience={{API_IDENTIFIER}}&response_type=token&client_id={{YOUR_CLIENT_ID}}&
+redirect_uri={{YOUR_CALLBACK_URI}}
+Go to that url, login, and retrive the jwt from the url after login.
+Use this in a private browser session to prevent auto sign in.
 
