@@ -77,7 +77,7 @@ python test_app.py
 ## RBAC Role Testing
 *** NOTE jwts provided for these tests only last 24 hours after submission!\
 The delete tests will only work one time.  If a second run of these tests is made, then then some of the delete tests will fail since what they're trying to delete is no longer there due to the previous run.\
-In Postman, import the file below and run the tests:
+In Postman, import the file below and run the tests while the server is running:
 - udacity_Capstone.postman_collection.json
 
 ## Heroku
