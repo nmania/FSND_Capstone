@@ -6,8 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from app import create_app
 from models import setup_db, Movie, Actor
 
-DATABASE_NAME = "capstone_test"
-DATABASE_PATH = "postgresql://{}/{}".format('postgres@localhost:5432', DATABASE_NAME)
+DATABASE_PATH = os.environ.get('TEST_DATABASE_URL')
 
 # Actor Tests
 class ActorTestCase(unittest.TestCase):
@@ -17,7 +16,6 @@ class ActorTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        # self.database_name = "capstone_test"
         self.database_path = DATABASE_PATH
         setup_db(self.app, self.database_path)
 
@@ -136,7 +134,6 @@ class MovieTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        # self.database_name = "capstone_test"
         self.database_path = DATABASE_PATH
         setup_db(self.app, self.database_path)
 
