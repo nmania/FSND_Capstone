@@ -48,12 +48,12 @@ With Postgres running, create a database using the capstone.psql file provided b
 ```bash
 dropdb capstone
 createdb capstone
-psql capstone < capstone_test.psql
+psql capstone < capstone.psql
 ```
 
 ## Running the server
 Ensure you are working using your created virtual environment.
-Set the source to setup.sh
+Set the source to setup.sh:
 ```bash
 source setup.sh
 ```
@@ -65,7 +65,7 @@ flask run --reload
 ```
 
 ## Unit Testing
-*** NOTE jwts provided for these tests only last 24 hours after submission!
+*** NOTE jwts provided for these tests only last 24 hours after submission!\
 To run the unit tests, run
 ```
 dropdb capstone_test
@@ -75,14 +75,13 @@ python test_app.py
 ```
 
 ## RBAC Role Testing
-*** NOTE jwts provided for these tests only last 24 hours after submission!
-In Postman, import the file
-    - udacity Capstone.postman_collection.json
+*** NOTE jwts provided for these tests only last 24 hours after submission!\
+In Postman, import the file 
+- udacity_Capstone.postman_collection.json
 Run the tests in that to check if the roles are working properly.
 
 ## Heroku
-To see the app on Heroku go to: 
-    - https://hiltz-fsnd-capstone.herokuapp.com/
+To see the app on Heroku go to: https://hiltz-fsnd-capstone.herokuapp.com/
 
 ## Endpoints
 ```
@@ -228,33 +227,32 @@ PATCH /movies/${id}
 ```
 
 ### Auth0 Roles
-API permissions:
-    - `get:actors`: Can access the route GET '/actors'
-    - `get:movies`:  Can access the route GET '/movies'
-    - `delete:actors`: Can access the routeDELETE /actors/${id}
-    - `delete:movies`: Can access the routeDELETE /movies/${id}
-    - `post:actors`: Can access the routePOST /actors
-    - `post:movies`: Can access the routePOST /movies
-    - `patch:actors`: Can access the routePATCH /actors/${id}
-    - `patch:movies`: Can access the routePATCH /movies/${id}
-Roles:
-    - Casting Assistant
-        - `get:actors`
-        - `get:movies`
-    - Casting Director 
-        - All actions of a casting assistant plus
-        - `delete:actors`
-        - `post:actors`
-        - `patch:actors`
-        - `patch:movies`
-    - Executive Producer
-        - All actions of a casting director plus
-        - `delete:movies`
-        - `post:movies`
+API permissions:\
+    - `get:actors`: Can access the route GET '/actors'\
+    - `get:movies`:  Can access the route GET '/movies'\
+    - `delete:actors`: Can access the routeDELETE /actors/${id}\
+    - `delete:movies`: Can access the routeDELETE /movies/${id}\
+    - `post:actors`: Can access the routePOST /actors\
+    - `post:movies`: Can access the routePOST /movies\
+    - `patch:actors`: Can access the routePATCH /actors/${id}\
+    - `patch:movies`: Can access the routePATCH /movies/${id}\
+Roles:\
+    - Casting Assistant\
+        - `get:actors`\
+        - `get:movies`\
+    - Casting Director\
+        - All actions of a casting assistant plus\
+        - `delete:actors`\
+        - `post:actors`\
+        - `patch:actors`\
+        - `patch:movies`\
+    - Executive Producer\
+        - All actions of a casting director plus\
+        - `delete:movies`\
+        - `post:movies`\
 
-To get the jwt from Auth0 use
+To get the jwt from Auth0 use:\
 https://{{YOUR_DOMAIN}}/authorize?audience={{API_IDENTIFIER}}&response_type=token&client_id={{YOUR_CLIENT_ID}}&
 redirect_uri={{YOUR_CALLBACK_URI}}
-Go to that url, login, and retrive the jwt from the url after login.
-Use this in a private browser session to prevent auto sign in.
-
+Go to that url, login, and retrive the jwt from the url after login.\
+Use this in a private browser session to prevent auto sign in.\
