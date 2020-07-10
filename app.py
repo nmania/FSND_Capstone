@@ -23,11 +23,8 @@ def create_app(test_config=None):
 
     # For the general IP
     @app.route('/')
-    def get_greeting():
-        excited = os.environ['EXCITED']
-        greeting = "Hello" 
-        if excited == 'true': greeting = greeting + "!!!!!"
-        return greeting
+    def root_route():
+        return 'This is working'
 
     # Actor routes *******************************************
     @app.route('/actors', methods=['GET'])
@@ -48,8 +45,7 @@ def create_app(test_config=None):
     @requires_auth('delete:actors')
     def delete_actor(payload,actor_id):
 
-        actor = Actor.query.filter(
-            Actor.id == actor_id).one_or_none()
+        actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
         
         if actor is None:
             abort(404)  # abort if id is not found
