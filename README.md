@@ -76,10 +76,8 @@ python test_app.py
 
 ## RBAC Role Testing
 *** NOTE jwts provided for these tests only last 24 hours after submission!\
-In Postman, import the file:
+In Postman, import the file below and run the tests:
 - udacity_Capstone.postman_collection.json
-\
-Run the tests in that to check if the roles are working properly.
 
 ## Heroku
 To see the app on Heroku go to: https://hiltz-fsnd-capstone.herokuapp.com/
@@ -251,9 +249,3 @@ PATCH /movies/${id}
         - All actions of a casting director plus
         - `delete:movies`
         - `post:movies`
-
-To get the jwt from Auth0 use:
-- https://{{YOUR_DOMAIN}}/authorize?audience={{API_IDENTIFIER}}&response_type=token&client_id={{YOUR_CLIENT_ID}}&redirect_uri={{YOUR_CALLBACK_URI}}
-\
-Go to that url, login, and retrive the jwt from the url after login.\
-Use this in a private browser session to prevent auto sign in.
