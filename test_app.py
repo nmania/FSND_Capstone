@@ -7,6 +7,8 @@ from app import create_app
 from models import setup_db, Movie, Actor
 
 DATABASE_PATH = os.environ.get('TEST_DATABASE_URL')
+PERMISSION = os.environ.get('EXECUTIVE_PRODUCER')
+auth_header = {'Authorization': "Bearer " + PERMISSION}
 
 # Actor Tests
 class ActorTestCase(unittest.TestCase):
@@ -47,7 +49,7 @@ class ActorTestCase(unittest.TestCase):
     # GET /actors good
     def test_get_actors_good(self):
         """Test that get actors returns 200"""
-        res = self.client().get('/actors')
+        res = self.client().get('/actors',headers=auth_header)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -56,7 +58,7 @@ class ActorTestCase(unittest.TestCase):
     # GET /actors bad
     def test_get_actors_bad(self):
         """Test that get actors returns 405 due to a bad call"""
-        res = self.client().get('/actors/3')
+        res = self.client().get('/actors/3',headers=auth_header)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 405)
         self.assertEqual(data['success'], False)
@@ -66,7 +68,7 @@ class ActorTestCase(unittest.TestCase):
     def test_delete_actor_good(self):
         """Test to make sure an actor can be deleted"""
         actor_id = 1
-        res = self.client().delete('/actors/'+str(actor_id))
+        res = self.client().delete('/actors/'+str(actor_id),headers=auth_header)
         data = json.loads(res.data)
         actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
 
@@ -79,7 +81,7 @@ class ActorTestCase(unittest.TestCase):
     def test_delete_actor_bad(self):
         """Test to make sure a non-existing actor deletion attempt returns a 404"""
         actor_id = 999999
-        res = self.client().delete('/actors/'+str(actor_id))
+        res = self.client().delete('/actors/'+str(actor_id),headers=auth_header)
         data = json.loads(res.data)
         actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
         self.assertEqual(res.status_code, 404)
@@ -89,7 +91,7 @@ class ActorTestCase(unittest.TestCase):
     # POST /actors good
     def test_post_actor_good(self):
         """Test to make sure an actor can be added"""
-        res = self.client().post('/actors',json=self.new_actor)
+        res = self.client().post('/actors',json=self.new_actor,headers=auth_header)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -98,7 +100,7 @@ class ActorTestCase(unittest.TestCase):
     # POST /actors bad
     def test_post_actor_bad(self):
         """Test to make sure a poorly formed actor json will retun a 422"""
-        res = self.client().post('/actors',json=self.bad_actor)
+        res = self.client().post('/actors',json=self.bad_actor,headers=auth_header)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
@@ -108,7 +110,7 @@ class ActorTestCase(unittest.TestCase):
     def test_update_actor_good(self):
         """Test to make sure an actor can be updated"""
         actor_id = 2
-        res = self.client().patch('/actors/'+str(actor_id), json={'age': 100})
+        res = self.client().patch('/actors/'+str(actor_id), json={'age': 100},headers=auth_header)
         data = json.loads(res.data)
         actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
         self.assertEqual(res.status_code, 200)
@@ -119,7 +121,7 @@ class ActorTestCase(unittest.TestCase):
     def test_update_actor_bad(self):
         """Test to make sure a non-existing actor post attempt returns a 404"""
         actor_id = 99999
-        res = self.client().patch('/actors/'+str(actor_id), json={'age': 100})
+        res = self.client().patch('/actors/'+str(actor_id), json={'age': 100},headers=auth_header)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
@@ -163,7 +165,7 @@ class MovieTestCase(unittest.TestCase):
     # GET /movies good
     def test_get_movies_good(self):
         """Test that gets movies returns 200"""
-        res = self.client().get('/movies')
+        res = self.client().get('/movies',headers=auth_header)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -172,7 +174,7 @@ class MovieTestCase(unittest.TestCase):
     # GET /movies bad
     def test_get_movies_bad(self):
         """Test that get movies returns 405 due to a bad call"""
-        res = self.client().get('/movies/3')
+        res = self.client().get('/movies/3',headers=auth_header)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 405)
         self.assertEqual(data['success'], False)
@@ -182,7 +184,7 @@ class MovieTestCase(unittest.TestCase):
     def test_delete_movie_good(self):
         """Test to make sure a movie can be deleted"""
         movie_id = 1
-        res = self.client().delete('/movies/'+str(movie_id))
+        res = self.client().delete('/movies/'+str(movie_id),headers=auth_header)
         data = json.loads(res.data)
         movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
         self.assertEqual(res.status_code, 200)
@@ -194,7 +196,7 @@ class MovieTestCase(unittest.TestCase):
     def test_delete_movie_bad(self):
         """Test to make sure a non-existing movie deletion attempt returns a 404"""
         movie_id = 999999
-        res = self.client().delete('/movies/'+str(movie_id))
+        res = self.client().delete('/movies/'+str(movie_id),headers=auth_header)
         data = json.loads(res.data)
         movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
         self.assertEqual(res.status_code, 404)
@@ -204,7 +206,7 @@ class MovieTestCase(unittest.TestCase):
     # POST /movies good
     def test_post_movie_good(self):
         """Test to make sure a movie can be added"""
-        res = self.client().post('/movies',json=self.new_movie)
+        res = self.client().post('/movies',json=self.new_movie,headers=auth_header)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -213,7 +215,7 @@ class MovieTestCase(unittest.TestCase):
     # POST /movies bad
     def test_post_movie_bad(self):
         """Test to make sure a poorly formed movie json will retun a 422"""
-        res = self.client().post('/movies',json=self.bad_movie)
+        res = self.client().post('/movies',json=self.bad_movie,headers=auth_header)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
@@ -223,7 +225,7 @@ class MovieTestCase(unittest.TestCase):
     def test_update_movie_good(self):
         """Test to make sure a movie can be updated"""
         movie_id = 2
-        res = self.client().patch('/movies/'+str(movie_id), json={'title': 'New Title'})
+        res = self.client().patch('/movies/'+str(movie_id), json={'title': 'New Title'},headers=auth_header)
         data = json.loads(res.data)
         movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
         self.assertEqual(res.status_code, 200)
@@ -234,7 +236,7 @@ class MovieTestCase(unittest.TestCase):
     def test_update_movie_bad(self):
         """Test to make sure a non-existing movie post attempt returns a 404"""
         movie_id = 99999
-        res = self.client().patch('/movies/'+str(movie_id), json={'title': 'New Title'})
+        res = self.client().patch('/movies/'+str(movie_id), json={'title': 'New Title'},headers=auth_header)
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
