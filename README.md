@@ -1,5 +1,7 @@
 # Full Stack Nanodegree Capstone Project
 
+Welcome to the Full Stack Nanodegree Capstone Project.  This project will demostrate how to create a backend server with a database, create authorizations, test the backend, and deploy the backend to Heroku.  First this will create a Flask server with a Postgres database.  Then routes will be created for the two tables in the database (actor and movie).  Routes will include a GET, POST, PATCH, and DELETE method for each table.  Next 3 different users will be created to simulate users that might use these.  Each user will be given a specific role that will limit what they are able to do in the system.  After that is all completed, tests to check the routes and user privlegdes will be run.  Once all tests pass, the system will then be deployed to Heroku and be useable.  The next step after this project is to create a front end that uses this created backend.
+
 ## Getting Started
 
 ### Installing Dependencies
