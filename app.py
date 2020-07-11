@@ -6,14 +6,16 @@ from flask_cors import CORS
 import json
 from auth import AuthError, requires_auth
 
+
 def create_app(test_config=None):
 
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
 
-    # CORS Headers 
-    @app.after_request #app decorator that adds headers to the response (i.e. after request)
+    # CORS Headers
+    # app decorator that adds headers to the response (i.e. after request)
+    @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Headers',
                              'Content-Type,Authorization,true')
@@ -43,10 +45,9 @@ def create_app(test_config=None):
 
     @app.route('/actors/<int:actor_id>', methods=['DELETE'])
     @requires_auth('delete:actors')
-    def delete_actor(payload,actor_id):
+    def delete_actor(payload, actor_id):
 
         actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
-        
         if actor is None:
             abort(404)  # abort if id is not found
         else:
@@ -69,15 +70,14 @@ def create_app(test_config=None):
         new_name = body.get('name', None)
         new_age = body.get('age', None)
         new_gender = body.get('gender', None)
-        
         try:
             if not(new_name and new_age
                     and new_gender):
                 abort(422)
             else:
                 actor = Actor(name=new_name,
-                                    age=new_age,
-                                    gender=new_gender)
+                              age=new_age,
+                              gender=new_gender)
                 actor.insert()
                 return jsonify({
                     'success': True,
@@ -88,21 +88,24 @@ def create_app(test_config=None):
 
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
     @requires_auth('patch:actors')
-    def update_actor(payload,actor_id):
-        body = request.get_json()  # get the request json to get the body of the request
+    def update_actor(payload, actor_id):
+        # get the request json to get the body of the request
+        body = request.get_json()
 
         actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
-        # if this abort is inside the try/catch then 
+        # if this abort is inside the try/catch then
         # it will always bubble up to the except abort
-        if actor is None:  
+        if actor is None:
             abort(404)  # abort if actor id is not found
         else:
             try:
-                # Check what attributes are contained in the body and update accordingly
+                # Check what attributes are contained in
+                # the body and update accordingly
                 if 'name' in body:
                     actor.name = body.get('name')
                 if 'age' in body:
-                    # body data is a string, so this must be coerced into an int
+                    # body data is a string,
+                    # so this must be coerced into an int
                     actor.age = int(body.get('age'))
                 if 'gender' in body:
                     actor.gender = body.get('gender')
@@ -115,9 +118,8 @@ def create_app(test_config=None):
                     'id': actor.id
                 })
 
-            except:
+            except Exception:
                 abort(422)
-
 
     # Movie routes *****************************************
     @app.route('/movies', methods=['GET'])
@@ -136,7 +138,7 @@ def create_app(test_config=None):
 
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     @requires_auth('delete:movies')
-    def delete_movie(payload,movie_id):
+    def delete_movie(payload, movie_id):
 
         movie = Movie.query.filter(
             Movie.id == movie_id).one_or_none()
@@ -154,7 +156,6 @@ def create_app(test_config=None):
             except Exception:
                 abort(422)
 
-
     @app.route('/movies', methods=['POST'])
     @requires_auth('post:movies')
     def post_movies(payload):
@@ -169,7 +170,7 @@ def create_app(test_config=None):
                 abort(422)
             else:
                 movie = Movie(title=new_title,
-                                    releaseDate=new_release)
+                              releaseDate=new_release)
                 movie.insert()
 
                 return jsonify({
@@ -181,17 +182,19 @@ def create_app(test_config=None):
 
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     @requires_auth('patch:movies')
-    def update_movies(payload,movie_id):
+    def update_movies(payload, movie_id):
 
-        body = request.get_json()  # get the request json to get the body of the request
+        # get the request json to get the body of the request
+        body = request.get_json()
         movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
-        # if this abort is inside the try/catch then 
+        # if this abort is inside the try/catch then
         # it will always bubble up to the except abort
-        if movie is None:  
+        if movie is None:
             abort(404)  # abort if movie id is not found
         else:
             try:
-                # Check what attributes are contained in the body and update accordingly
+                # Check what attributes are contained
+                # in the body and update accordingly
                 if 'title' in body:
                     movie.title = body.get('title')
                 if 'releaseDate' in body:
@@ -205,7 +208,7 @@ def create_app(test_config=None):
                     'id': movie.id
                 })
 
-            except:
+            except Exception:
                 abort(422)
 
     # Error handlers********************************************
@@ -254,8 +257,8 @@ def create_app(test_config=None):
             "sys_error": str(error)
         }), 405
 
-
     return app
+
 
 app = create_app()
 
